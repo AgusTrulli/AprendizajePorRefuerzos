@@ -8,8 +8,8 @@ class TatetiEnv(gym.Env):
     Ambiente personalizado que sigue la interfaz de gym.
     Es un entorno simple en el cuál el agente debe aprender a jugar ta-te-ti
     """
-    # Dado que estamos en colab, no podemos implementar la salida por interfaz
-    # gráfica ('human' render mode)
+
+    
     metadata = {'render.modes': ['console']}
     # constantes
     CLEAN_SQUARE = 0
@@ -59,10 +59,7 @@ class TatetiEnv(gym.Env):
         )
 
     def reset(self) -> np.ndarray:
-        """
-        Importante: la observación devuelta debe ser un array de numpy
-        :return: (np.array)
-        """
+        
         # Se inicializa el agente a la derecha de la grilla
         self.agent_pos = self.INITIAL_STATE.copy()
         # convertimos con astype a float32 (numpy) para hacer más general el agente
@@ -118,8 +115,7 @@ class TatetiEnv(gym.Env):
         }
         reward = rewards[winner] if not casilla_ocupada else 0
 
-        # gym también nos permite devolver información adicional, ej. en atari:
-        # las vidas restantes del agente (no usaremos esto por ahora)
+        # gym también nos permite devolver información adicional
         info = {}
 
         return self.agent_pos, reward, bool(winner), info
@@ -150,9 +146,7 @@ class RealTateti():
     Ambiente personalizado que sigue la interfaz de gym.
     Es un entorno simple en el cuál el agente debe aprender a jugar ta-te-ti
     """
-    # Dado que estamos en colab, no podemos implementar la salida por interfaz
-    # gráfica ('human' render mode)
-    # constantes
+    
     CLEAN_SQUARE = 0
     AGENT_CHIP = 1
     PLAYER_CHIP = 2
@@ -214,61 +208,7 @@ class RealTateti():
         # (en caso de que querramos usar acciones continuas)
         return self.agent_pos
 
-    # def _step(self, action: int):
-    #     if 0 <= action < 9:
-    #         if self.agent_pos[action] == self.CLEAN_SQUARE:
-    #             self.agent_pos[action] = self.AGENT_CHIP
-    #             casilla_ocupada = False
-    #         else:
-    #             casilla_ocupada = True #dice que la casilla estaba ocupada para que no cambie el estado
-    #     else:
-    #         raise ValueError("Received invalid action={} which is not part of the action space".format(action))
-    #
-    #     # gano el agente o el oponente? si gano alguno, termina la partida
-    #     # 0 -> no hay ganador, 1 -> gana el agente, 2 -> gana el oponente, 3 -> finaliza sin ganadores
-    #     if any(self.WIN_COMB[j].issubset(
-    #             {i for i, value in enumerate(self.agent_pos) if value == self.AGENT_CHIP}
-    #         )
-    #         for j in range(len(self.WIN_COMB))
-    #     ):
-    #         winner = 1
-    #     elif len([i for i, value in enumerate(self.agent_pos) if value == self.CLEAN_SQUARE]) == 0 :# si no hay celdas libres
-    #         winner = 3
-    #     else:
-    #         winner = 0
-    #
-    #     # el oponente elige una posicion al asar de las que quedan libres
-    #     if winner == 0 and not casilla_ocupada:
-    #         self.agent_pos[
-    #             random.choice(
-    #                 [i for i, value in enumerate(self.agent_pos) if value == self.CLEAN_SQUARE]
-    #             )
-    #         ] = self.PLAYER_CHIP
-    #
-    #     if any(self.WIN_COMB[j].issubset(
-    #             {i for i, value in enumerate(self.agent_pos)if value == self.PLAYER_CHIP}
-    #         )
-    #         for j in range(len(self.WIN_COMB))
-    #     ):
-    #         winner = 2
-    #
-    #     # Asignamos recompensa sólo cuando el agente llega a su objetivo
-    #     # (recompensa = 0 en todos los demás estados)
-    #     rewards = {
-    #         #<winner>: reward
-    #         0: -1,
-    #         1: 20,
-    #         2: -2,
-    #         3: -1
-    #     }
-    #     reward = rewards[winner] if not casilla_ocupada else 0
-    #
-    #     # gym también nos permite devolver información adicional, ej. en atari:
-    #     # las vidas restantes del agente (no usaremos esto por ahora)
-    #     info = {}
-    #
-    #     return self.agent_pos, reward, bool(winner), info
-
+    
     def _do_player_action(self, action):
         if 0 <= action < 9:
             if self.agent_pos[action] == self.CLEAN_SQUARE:
